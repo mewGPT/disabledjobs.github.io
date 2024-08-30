@@ -18,12 +18,13 @@
             padding: 10px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
         }
         .logo {
             width: 50px;
             height: 50px;
             cursor: pointer;
+            margin-right: 20px;
         }
         .menu-buttons {
             display: flex;
@@ -43,6 +44,10 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+        }
+        .home-image {
+            max-width: 50%;
+            height: auto;
         }
         .upload-button {
             margin-top: 20px;
@@ -94,22 +99,25 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+        .about-us-container {
+            background: linear-gradient(to bottom right, #ffff00, #ffffe0);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
     <div class="menu-bar">
-        <img src="./arsh.jpeg" alt="Logo" class="logo" onclick="showHomePage()" />
+        <img src="./arshlogo.png" alt="Logo" class="logo" onclick="showHomePage()" />
         <div class="menu-buttons">
+            <button onclick="showDisabledJobs()">Disabled jobs</button>
             <div class="dropdown">
                 <button>Languages</button>
                 <div class="dropdown-content">
-                    <a href="#">English</a>
-                    <a href="#">Spanish</a>
-                    <a href="#">French</a>
-                    <a href="#">German</a>
-                    <a href="#">Chinese</a>
-                    <a href="#">Japanese</a>
-                    <a href="#">Arabic</a>
+                    <a href="#" onclick="changeLanguage('en')">English</a>
+                    <a href="#" onclick="changeLanguage('es')">Español</a>
                 </div>
             </div>
             <button onclick="showAboutUs()">About Us</button>
@@ -117,110 +125,138 @@
         </div>
     </div>
 
-    <div id="content" class="content">
-        <<h2>About Us</h2>
-                <p>We provide jobs for the disabled."</p>
-        <img src="./imagecentral.jpeg" alt="Job Application" />
-        <button id="uploadBtn" class="upload-button">Upload</button>
-    </div>
+    <div id="content" class="content"></div>
 
     <script>
         const content = document.getElementById('content');
+        let currentLanguage = 'en';
+
+        const translations = {
+            en: {
+                title: "We provide jobs to the disabled.",
+                uploadButton: "Upload",
+                aboutUs: "About Us",
+                aboutUsContent: "We want disabled people to be happy when they get a job. We want you to enjoy your job and get a high salary and get treated well. This website was created by me, Arsh Makkar because I want to help disabled people be happier. Also, if you are working too much, we will speak with your company to give you breaks. We will help negotiate with your company!",
+                contactUs: "Contact Us",
+                name: "Your Name",
+                email: "Your Email",
+                message: "How can we help you?",
+                submit: "Submit",
+                thankYou: "Thank you for your message. We will get back to you soon!",
+                disabledJobs: "Disabled jobs"
+            },
+            es: {
+                title: "Proporcionamos trabajos a personas con discapacidad.",
+                uploadButton: "Subir",
+                aboutUs: "Sobre Nosotros",
+                aboutUsContent: "Queremos que las personas con discapacidad sean felices cuando consiguen un trabajo. Queremos que disfrutes de tu trabajo, obtengas un salario alto y seas tratado bien. Este sitio web fue creado por mí, Arsh Makkar, porque quiero ayudar a las personas con discapacidad a ser más felices. Además, si estás trabajando demasiado, hablaremos con tu empresa para que te den descansos. ¡Te ayudaremos a negociar con tu empresa!",
+                contactUs: "Contáctenos",
+                name: "Su Nombre",
+                email: "Su Correo Electrónico",
+                message: "¿Cómo podemos ayudarte?",
+                submit: "Enviar",
+                thankYou: "Gracias por su mensaje. Nos pondremos en contacto con usted pronto!",
+                disabledJobs: "Trabajos para discapacitados"
+            }
+        };
 
         function showHomePage() {
             content.innerHTML = `
-                <img src="./imagecentral.jpeg" alt="Job Application" />
-                <button id="uploadBtn" class="upload-button">Upload</button>
+                <h1>${translations[currentLanguage].title}</h1>
+                <img src="./imagecentral.jpeg" alt="Job Application" class="home-image" />
+                <button id="uploadBtn" class="upload-button">${translations[currentLanguage].uploadButton}</button>
             `;
             document.getElementById('uploadBtn').addEventListener('click', showQuestionnaire);
         }
 
-        function showQuestionnaire() {
-            content.innerHTML = `
-                <h2>Job Application Questionnaire</h2>
-                <form id="questionnaire">
-                    <input type="text" name="name" placeholder="Name" required>
-                    <input type="email" name="email" placeholder="Email" required>
-                    <select name="disabled" required>
-                        <option value="">Are you disabled?</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
-                    <input type="number" name="age" placeholder="How old are you?" required>
-                    <textarea name="life" placeholder="Do you have a good life? Tell me more." required></textarea>
-                    <input type="text" name="position" placeholder="What job position are you looking for?" required>
-                    <textarea name="reason" placeholder="Why do you want this job?" required></textarea>
-                    <textarea name="previous_job" placeholder="Have you had a job before and in that job, have you gotten fired?" required></textarea>
-                    <textarea name="treatment" placeholder="Are people treating you nicely?" required></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-            `;
-            document.getElementById('questionnaire').addEventListener('submit', showJobList);
-        }
-
-        function showJobList(e) {
-            e.preventDefault();
-            content.innerHTML = `
-                <h2>Available Jobs</h2>
-                <form id="jobSelectionForm">
-                    <div id="jobList">
-                        <div class="job-item">
-                            <h3>Software Developer</h3>
-                            <p>Company A</p>
-                            <input type="checkbox" name="job" value="Software Developer - Company A">
-                        </div>
-                        <div class="job-item">
-                            <h3>Data Analyst</h3>
-                            <p>Company B</p>
-                            <input type="checkbox" name="job" value="Data Analyst - Company B">
-                        </div>
-                        <div class="job-item">
-                            <h3>Project Manager</h3>
-                            <p>Company C</p>
-                            <input type="checkbox" name="job" value="Project Manager - Company C">
-                        </div>
-                    </div>
-                    <button type="submit">Submit</button>
-                </form>
-            `;
-            document.getElementById('jobSelectionForm').addEventListener('submit', showConfirmation);
-        }
-
-        function showConfirmation(e) {
-            e.preventDefault();
-            content.innerHTML = `
-                <h2>Successfully done</h2>
-                <p>We will get back to you after 72 hours.</p>
-            `;
+        function showDisabledJobs() {
+            content.innerHTML = `<h2>${translations[currentLanguage].disabledJobs}</h2>`;
+            // Add content for disabled jobs page here
         }
 
         function showAboutUs() {
             content.innerHTML = `
-                <h2>About Us</h2>
-                <p>We want disabled people to be happy when they get a job. We want you to enjoy your job and get a high salary and get treated well.</p>
-                <p>This website was created by me, Arsh Makkar because I want to help disabled people be happier. Also, if you are working too much, we will speak with your company to give you breaks. We will help negotiate with your company!</p>
+                <div class="about-us-container">
+                    <h2>${translations[currentLanguage].aboutUs}</h2>
+                    <p>${translations[currentLanguage].aboutUsContent}</p>
+                </div>
             `;
         }
 
         function showContactUs() {
             content.innerHTML = `
-                <h2>Contact Us</h2>
+                <h2>${translations[currentLanguage].contactUs}</h2>
                 <form id="contactForm">
-                    <input type="text" name="name" placeholder="Your Name" required>
-                    <input type="email" name="email" placeholder="Your Email" required>
-                    <textarea name="message" placeholder="How can we help you?" required></textarea>
-                    <button type="submit">Submit</button>
+                    <input type="text" name="name" placeholder="${translations[currentLanguage].name}" required>
+                    <input type="email" name="email" placeholder="${translations[currentLanguage].email}" required>
+                    <textarea name="message" placeholder="${translations[currentLanguage].message}" required></textarea>
+                    <button type="submit">${translations[currentLanguage].submit}</button>
                 </form>
             `;
             document.getElementById('contactForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                alert('Thank you for your message. We will get back to you soon!');
+                alert(translations[currentLanguage].thankYou);
                 showHomePage();
             });
         }
 
+        function changeLanguage(lang) {
+            console.log('Changing language to:', lang);
+            currentLanguage = lang;
+            updatePageContent();
+        }
+
+        function updatePageContent() {
+            console.log('Updating page content');
+            // Update navigation bar text
+            document.querySelectorAll('.menu-buttons button').forEach(button => {
+                const key = button.textContent.toLowerCase().replace(' ', '');
+                if (translations[currentLanguage][key]) {
+                    button.textContent = translations[currentLanguage][key];
+                }
+            });
+
+            // Update current page content
+            const currentPage = getCurrentPage();
+            console.log('Current page:', currentPage);
+            switch(currentPage) {
+                case 'home':
+                    showHomePage();
+                    break;
+                case 'aboutUs':
+                    showAboutUs();
+                    break;
+                case 'contactUs':
+                    showContactUs();
+                    break;
+                case 'disabledJobs':
+                    showDisabledJobs();
+                    break;
+                default:
+                    console.log('Unknown page, defaulting to home');
+                    showHomePage();
+            }
+        }
+
+        function getCurrentPage() {
+            if (content.querySelector('h1')) return 'home';
+            if (content.querySelector('.about-us-container')) return 'aboutUs';
+            if (content.querySelector('#contactForm')) return 'contactUs';
+            if (content.querySelector('h2') && content.querySelector('h2').textContent.includes('job')) return 'disabledJobs';
+            return 'unknown';
+        }
+
         // Initialize the home page
         showHomePage();
+
+        // Add event listeners for language switching
+        document.querySelectorAll('.dropdown-content a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('onclick').match(/'(\w+)'/)[1];
+                changeLanguage(lang);
+            });
+        });
     </script>
 </body>
 </html>
