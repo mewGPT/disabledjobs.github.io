@@ -18,7 +18,7 @@
             padding: 10px;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: space-between;
         }
         .logo {
             width: 50px;
@@ -29,6 +29,8 @@
         .menu-buttons {
             display: flex;
             align-items: center;
+            justify-content: flex-end;
+            flex-grow: 1;
         }
         .menu-bar button {
             margin: 0 10px;
@@ -46,7 +48,7 @@
             padding: 20px;
         }
         .home-image {
-            max-width: 50%;
+            max-width: 25%; /* Reduced size to half */
             height: auto;
         }
         .upload-button {
@@ -170,8 +172,57 @@
         }
 
         function showDisabledJobs() {
-            content.innerHTML = `<h2>${translations[currentLanguage].disabledJobs}</h2>`;
-            // Add content for disabled jobs page here
+            content.innerHTML = `<h2>${translations[currentLanguage].disabledJobs}</h2>
+            <div id="jobList">
+                <div class="job-item">
+                    <h3>Customer Service Representative</h3>
+                    <p><strong>Position:</strong> Full-Time</p>
+                    <p><strong>Salary:</strong> $40,000/year</p>
+                    <p>Assist customers with inquiries and provide support over phone or email. This role can be done remotely, offering flexibility in work hours. Ideal for someone with strong communication skills.</p>
+                </div>
+                <div class="job-item">
+                    <h3>Data Entry Specialist</h3>
+                    <p><strong>Position:</strong> Part-Time</p>
+                    <p><strong>Salary:</strong> $25/hour</p>
+                    <p>Responsible for entering data into databases with a high degree of accuracy. This job can often be performed from home, making it accessible for individuals with mobility limitations.</p>
+                </div>
+                <div class="job-item">
+                    <h3>Content Writer</h3>
+                    <p><strong>Position:</strong> Freelance</p>
+                    <p><strong>Salary:</strong> $30/hour</p>
+                    <p>Create engaging articles and blogs on various topics. This position is highly adaptable, allowing writers to work from home and choose their own hours.</p>
+                </div>
+                <div class="job-item">
+                    <h3>Web Developer</h3>
+                    <p><strong>Position:</strong> Remote</p>
+                    <p><strong>Salary:</strong> $50,000/year</p>
+                    <p>Develop and maintain websites for clients. This role requires technical skills but offers the flexibility of remote work, which is great for people with physical disabilities.</p>
+                </div>
+                <div class="job-item">
+                    <h3>Graphic Designer</h3>
+                    <p><strong>Position:</strong> Full-Time</p>
+                    <p><strong>Salary:</strong> $45,000/year</p>
+                    <p>Create visual content for various platforms. This job can be done remotely and offers a creative outlet for those with artistic skills.</p>
+                </div>
+                <div class="job-item">
+                    <h3>Virtual Assistant</h3>
+                    <p><strong>Position:</strong> Part-Time</p>
+                    <p><strong>Salary:</strong> $20/hour</p>
+                    <p>Assist business owners with administrative tasks such as scheduling, email management, and data entry. This role is flexible and can be done from home.</p>
+                </div>
+                <div class="job-item">
+                    <h3>Social Media Manager</h3>
+                    <p><strong>Position:</strong> Contract</p>
+                    <p><strong>Salary:</strong> $35/hour</p>
+                    <p>Manage and create content for social media accounts. This job is perfect for someone who is familiar with various social media platforms and can be done remotely.</p>
+                </div>
+                <div class="job-item">
+                    <h3>Transcriptionist</h3>
+                    <p><strong>Position:</strong> Freelance</p>
+                    <p><strong>Salary:</strong> $25/hour</p>
+                    <p>Convert audio recordings into written text. This role requires good listening skills and can be done from home, providing flexibility for those with disabilities.</p>
+                </div>
+            </div>`;
         }
 
         function showAboutUs() {
@@ -187,75 +238,58 @@
             content.innerHTML = `
                 <h2>${translations[currentLanguage].contactUs}</h2>
                 <form id="contactForm">
-                    <input type="text" name="name" placeholder="${translations[currentLanguage].name}" required>
-                    <input type="email" name="email" placeholder="${translations[currentLanguage].email}" required>
-                    <textarea name="message" placeholder="${translations[currentLanguage].message}" required></textarea>
+                    <label>${translations[currentLanguage].name}</label>
+                    <input type="text" id="name" required>
+                    <label>${translations[currentLanguage].email}</label>
+                    <input type="email" id="email" required>
+                    <label>${translations[currentLanguage].message}</label>
+                    <textarea id="message" rows="4" required></textarea>
                     <button type="submit">${translations[currentLanguage].submit}</button>
                 </form>
             `;
-            document.getElementById('contactForm').addEventListener('submit', function(e) {
-                e.preventDefault();
+
+            document.getElementById('contactForm').addEventListener('submit', function(event) {
+                event.preventDefault();
                 alert(translations[currentLanguage].thankYou);
+                this.reset();
+            });
+        }
+
+        function changeLanguage(language) {
+            currentLanguage = language;
+            showHomePage(); // Refresh page content with selected language
+        }
+
+        function showQuestionnaire() {
+            content.innerHTML = `
+                <h2>Job Application Form</h2>
+                <form id="jobForm">
+                    <label for="disability">Describe your disability:</label>
+                    <textarea id="disability" rows="4" required></textarea>
+                    <label for="qualifications">List your qualifications:</label>
+                    <textarea id="qualifications" rows="4" required></textarea>
+                    <label for="jobType">Preferred Job Type:</label>
+                    <select id="jobType">
+                        <option value="full-time">Full-Time</option>
+                        <option value="part-time">Part-Time</option>
+                        <option value="freelance">Freelance</option>
+                    </select>
+                    <button type="submit">Submit</button>
+                </form>
+            `;
+
+            document.getElementById('jobForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('Your application has been submitted!');
                 showHomePage();
             });
         }
 
-        function changeLanguage(lang) {
-            console.log('Changing language to:', lang);
-            currentLanguage = lang;
-            updatePageContent();
-        }
+        window.onload = showHomePage;
+    </script>
+</body>
+</html>
 
-        function updatePageContent() {
-            console.log('Updating page content');
-            // Update navigation bar text
-            document.querySelectorAll('.menu-buttons button').forEach(button => {
-                const key = button.textContent.toLowerCase().replace(' ', '');
-                if (translations[currentLanguage][key]) {
-                    button.textContent = translations[currentLanguage][key];
-                }
-            });
-
-            // Update current page content
-            const currentPage = getCurrentPage();
-            console.log('Current page:', currentPage);
-            switch(currentPage) {
-                case 'home':
-                    showHomePage();
-                    break;
-                case 'aboutUs':
-                    showAboutUs();
-                    break;
-                case 'contactUs':
-                    showContactUs();
-                    break;
-                case 'disabledJobs':
-                    showDisabledJobs();
-                    break;
-                default:
-                    console.log('Unknown page, defaulting to home');
-                    showHomePage();
-            }
-        }
-
-        function getCurrentPage() {
-            if (content.querySelector('h1')) return 'home';
-            if (content.querySelector('.about-us-container')) return 'aboutUs';
-            if (content.querySelector('#contactForm')) return 'contactUs';
-            if (content.querySelector('h2') && content.querySelector('h2').textContent.includes('job')) return 'disabledJobs';
-            return 'unknown';
-        }
-
-        // Initialize the home page
-        showHomePage();
-
-        // Add event listeners for language switching
-        document.querySelectorAll('.dropdown-content a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const lang = this.getAttribute('onclick').match(/'(\w+)'/)[1];
-                changeLanguage(lang);
-            });
         });
     </script>
 </body>
